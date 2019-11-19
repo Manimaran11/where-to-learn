@@ -1,0 +1,61 @@
+.App {
+    text-align: center;
+  }
+  
+  .App-logo {
+    height: 40vmin;
+  }
+  
+  .App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+  }
+  
+  .App-link {
+    color: #09d3ac;
+  }
+  
+  .App-platformList{
+    display: flex;
+  }
+  
+  .App-typeList{
+    margin: 10px;
+    padding: 20px;
+    font-size: 30px;
+  }
+  
+  .App-listofPlaces{
+    font-size: 15px;
+  }
+
+  .App-navlist{
+    margin: 0 .5rem;
+    padding: 0 .5rem;
+  }
+
+  .App-navlist:hover{
+    cursor: pointer;
+    content: "";
+    left: 25%;
+    right: 25%;
+    bottom: 0;
+    /* border: 1px solid black; */
+  }
+
+  .App-navmain{
+    list-style-type: none;
+    margin: 0;
+    text-transform: uppercase;
+    font-family: Avenir LT Std,Avenir,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    font-size: 1rem;
+    z-index: 15;
+    padding: 1.5rem 3.377%;
+    display: flex;
+  }

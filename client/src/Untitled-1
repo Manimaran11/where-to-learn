@@ -1,0 +1,22 @@
+subjects :
+// places : ["Coding Platform","Books","Online Courses","Links"]
+{
+    subject : "COMPUTER SCIENCE",
+    code : "CS",
+    sub_category : ["Algorithms","Artificial Intelligence","Networking","Operating Systems","Cyber Security"],
+   
+}
+{
+    subject : "SCIENCE",
+    code : "SCE",
+    sub_category : [""]
+}
+{
+    subject : "LANGUAGES",
+    code : "LANG"
+    sub_category : ["English","Tamil","Hindi","Kannada"]
+}
+{
+    subject : ""
+}
+
