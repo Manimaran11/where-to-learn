@@ -1,5 +1,7 @@
-const mongoose = require("mongoose");
+var mongoose = require("mongoose");
+mongoose.Promise = global.Promise;// makes Mongoose use native ES6 promise implementation
 const getSecret = require("./secret");
+// var cookieParser = require('cookie-parser');
 const express = require("express");
 const bodyParser = require("body-parser");
 const logger = require("morgan");
@@ -8,78 +10,68 @@ const Data = require("./data");
 const API_PORT = 3001;
 const app = express();
 const router = express.Router();
+const MongoClient = require('mongodb').MongoClient;
+const uri = "mongodb+srv://wtluser:wtlpass@cluster0-h18tu.mongodb.net/test?retryWrites=true&w=majority/";
+const client = new MongoClient(uri, { useNewUrlParser: true });
 
-const subjects = [{
-  subject : "COMPUTER SCIENCE",
-  code : "CS",
-  sub_category : ["Algorithms","Artificial Intelligence","Networking","Operating Systems","Cyber Security"],
-},
-{
-  subject : "ELECTRONICS",
-  code : "ELEN",
-  sub_category : ["VLSI","DIGITAL LOGIC"]
-},
-{
-  subject : "LANGUAGES",
-  code : "LANG",
-  sub_category : ["English","Tamil","Hindi","Kannada","Spanish"]
-}];
-
-const thingsTOLearnCs= {
-  "Algorithms":{
-    "Courses" :["Coursera","edx","udacity"],
-    "Books" :["Introduction to Algorithms by Thomas H. Cormen","Data Structures and Algorithms Made Easy","Data Structures and Algorithms in Java"],
-    "codingPlatforms":["Codechef","spoj","hackerearth","hackerrank","leetcode"]
-  },
-  "Java":{
-    "Courses" :["Coursera","edx","udacity"],
-    "Books" :["Java 8 in action","Head First Design Principles","Head First Java"],
-    "codingPlatforms":["Codechef","spoj","hackerearth","hackerrank","leetcode"]
-  },
-  "Operating Systems":{
-    "Books":["Operating System Concepts","Modern Operating Systems","Operating Systems: Design and Implementation"],
-    "Assignments":["CS224","CS234"],
-    "Websites":["Geeks for Geeks"],
-    "To do Projects":["Multi-Threaded Web Server","The Unix Shell","A file system"]
-  }
-};
-
-
-
-const dbRoute =
-  "mongodb+srv://wtluser:wtlpass@where-to-learn1-qwn5b.mongodb.net/test?retryWrites=true&w=majority";
-console.log("ji")
-// mongoose.connect(getSecret("dbUri"));
-// connects our back end code with the database
-mongoose.connect(dbRoute, { useNewUrlParser: true,useUnifiedTopology:true });
-let db = mongoose.connection;
-db.on('connected', function () {
- console.log('Mongoose default connection open to ' + dbRoute);
-});
-db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(logger("dev"));
 
-router.get("/list",(req,res)=>{
-  return res.json({message:subjects});
+
+router.get("/test",(req,res)=>{
+  MongoClient.connect(uri, {urlNewUrlParser: true}, function(err, client) {
+    if(err) {
+         console.log('Error occurred while connecting to MongoDB Atlas...\n',err);
+         throw err;
+    }
+    console.log('Connected...');
+    const collection = client.db("wtl").collection("wtl_topics");
+    console.log(collection)
+    // perform actions on the collection object
+    client.close();
 });
+});
+
+router.get("/list",(req,res)=>{
+    var subCode = req.query.sc;
+    var query = { sub_code: subCode};
+MongoClient.connect(uri, function(err, client) {
+  if (err) throw err;
+      var db = client.db("wtl");
+      db.collection("wtl_topics").find(query).toArray(function(err,response){
+        if (err) throw err;
+      res.json({message:response});
+      client.close()
+    }); 
+  }); 
+    return res;
+  });
+
+
 
 router.get("/subcat",(req,res)=>{
   console.log("inside subcate")
   let category = req.query.sc;
-  console.log(category,thingsTOLearnCs[0])
-  var response ;
-  for(var x in thingsTOLearnCs){
-    if(x == category)
-      {
-        return res.json({message:thingsTOLearnCs[x]});
-      }
-  }
-  console.log(response);
-  return res.json({message:"Not found"});
+  var query = { topic_code: category};
+  console.log(query)
+  MongoClient.connect(uri, function(err, client) {
+    if (err) throw err;
+    var db = client.db("wtl");
+    const collection = db.collection("wtl_sub_topics");
+    collection.find(query).toArray(function(err,response){
+      if (err) throw err;
+      console.log(response)
+    res.json({message:response})
+    client.close();
+  });
+  return res;
 });
+  
+});
+
+// router.
 
 router.get("/", (req, res) => {
  return res.json({ message: "HELLOW DDD" });

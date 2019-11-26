@@ -20,8 +20,9 @@
     "mongoose": "^5.7.9",
     "morgan": "^1.9.1"
   },
+  "private": true,
+  "proxy": "http://localhost:3001",
   "devDependencies": {
-    "nodemon": "^1.19.4"
-  },
-  "proxy": "http://localhost:3001"
+    "nodemon": "^2.0.1"
+  }
 }

@@ -5,7 +5,7 @@ import axios from "axios";
 import './App.css';
 
 const helloWorld = 'Welcome to Where to Learn';
-const list =["Datastructures and Algorithms","C++","JAVA","SQL","Interview prep","Data Science"]
+
 const courseSites = [
   "MIT openCourseware","Geeks for Geeks"];
 const codingPlatforms = ["Codechef","spoj","hackerearth","hackerrank","leetcode"]
@@ -36,12 +36,13 @@ class App extends Component {
     this.fetchSubjects();
   }
 
-  componentWillUpdate(){
-    console.log("Component will update")
-  }
+  // static getDerivedStateFromProps(props,state){
+  //   console.log("Component will update",props,state)
+  //   return props
+  // }
 
   fetchSubjects(){
-    fetch(serverUrl+"list").then(res=>res.json()).then(result=>{
+    fetch(serverUrl+"list?sc=CS").then(res=>res.json()).then(result=>{
       // Forces batching
       console.log(result)
       ReactDOM.unstable_batchedUpdates(() => {
@@ -62,6 +63,10 @@ class App extends Component {
     let url=serverUrl+"subcat?sc="+e;
     fetch(decodeURI(url)).then(res=>res.json()).then(result=>{
       console.log(result);
+      this.props.history.push({
+        pathname:'/learn',
+        data:result}
+        )
     })
   }
 
@@ -80,7 +85,7 @@ class App extends Component {
 
   subCategoryChange(subCat){
     let history = useHistory();
-    history.push("/subcat");
+  
   }
   render(){
     const { error, isLoaded, items } = this.state;
@@ -93,10 +98,11 @@ class App extends Component {
         <h2>{helloWorld}</h2>
         <h4>Please select a topic</h4>
         <ul className="App-navmain">
-          {this.state.subjects.map(el=> <li key={el.code} className="App-navlist" value={el.subject} onClick={this.handleTopicChange.bind(this,el)} >{el.subject}
+          {this.state.subjects.map(el=> <li key={el.topic_code} onClick={this.fetchSubCategory.bind(this,el.topic_code)} className="App-navlist" value={el.topic_code}>
+            {el.display_val}
           </li>)}
         </ul>
-          <NavBar onclk={this.fetchSubCategory} list={this.state.subCategories}></NavBar>
+          {/* <NavBar onclk={this.fetchSubCategory} list={this.state.subCategories}></NavBar> */}
     
       </div>
   );
@@ -105,12 +111,11 @@ class App extends Component {
 
 function NavBar(props){
   return(
-    <NavLink to="/dummy" activeClassName="selected">
     <ul className="App-navmain">
     {props.list.map((itm,i)=>
     <li key={i} onClick={(e)=>props.onclk(itm)} className="App-navlist">{itm}</li>
     )}</ul>
-    </NavLink>
+    
   )
 }
 
@@ -147,11 +152,7 @@ export default App;
 //     }
 //   }
 
-//   getDataFromDb = () => {
-//     fetch("http://localhost:3001/api/getData")
-//       .then(data => data.json())
-//       .then(res => this.setState({ data: res.data }));
-//   };
+
 
 //   putDataToDB = message => {
 //     let currentIds = this.state.data.map(data => data.id);
