@@ -59,3 +59,13 @@
     padding: 1.5rem 3.377%;
     display: flex;
   }
+
+  .lh-header{
+    display: inline-flex;
+    margin: auto;
+    padding: 5px;
+  }
+
+  .lh-val{
+    padding: 10px;
+  }

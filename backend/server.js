@@ -12,7 +12,7 @@ const app = express();
 const router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://wtluser:wtlpass@cluster0-h18tu.mongodb.net/test?retryWrites=true&w=majority/";
-const client = new MongoClient(uri, { useNewUrlParser: true });
+const client = new MongoClient(uri, { useNewUrlParser: true },{useUnifiedTopology: true});
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -21,7 +21,7 @@ app.use(logger("dev"));
 
 
 router.get("/test",(req,res)=>{
-  MongoClient.connect(uri, {urlNewUrlParser: true}, function(err, client) {
+  MongoClient.connect(uri, {urlNewUrlParser: true, useUnifiedTopology: true }, function(err, client) {
     if(err) {
          console.log('Error occurred while connecting to MongoDB Atlas...\n',err);
          throw err;
@@ -32,12 +32,14 @@ router.get("/test",(req,res)=>{
     // perform actions on the collection object
     client.close();
 });
+return "hi";
 });
 
-router.get("/list",(req,res)=>{
+router.get("/list",async(req,res)=>{
     var subCode = req.query.sc;
     var query = { sub_code: subCode};
-MongoClient.connect(uri, function(err, client) {
+    console.log(query)
+MongoClient.connect(uri,{useNewUrlParser: true}, function(err, client) {
   if (err) throw err;
       var db = client.db("wtl");
       db.collection("wtl_topics").find(query).toArray(function(err,response){
@@ -46,6 +48,14 @@ MongoClient.connect(uri, function(err, client) {
       client.close()
     }); 
   }); 
+  // const client = await MongoClient(uri,{useUnifiedTopology: true });
+  // var db = await client.db("wtl");
+  // console.log(db)
+  // db.collection("wtl_topics").find(query).toArray(function(err,response){
+  //           if (err) throw err;
+  //         res.json({message:response});
+  //         client.close()
+  //       }); 
     return res;
   });
 
@@ -62,7 +72,8 @@ router.get("/subcat",(req,res)=>{
     const collection = db.collection("wtl_sub_topics");
     collection.find(query).toArray(function(err,response){
       if (err) throw err;
-      console.log(response)
+      delete  response[0]["_id"];
+      delete  response[0]["topic_code"];
     res.json({message:response})
     client.close();
   });

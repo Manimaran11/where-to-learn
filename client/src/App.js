@@ -6,14 +6,6 @@ import './App.css';
 
 const helloWorld = 'Welcome to Where to Learn';
 
-const courseSites = [
-  "MIT openCourseware","Geeks for Geeks"];
-const codingPlatforms = ["Codechef","spoj","hackerearth","hackerrank","leetcode"]
-const books = ["Java 8 in action","Head First Design Principles","Head First Java"]
-const cppBooks = ["The C++ Programming Language Book by Bjarne Stroustrup"]
-const topics={};
-
-const whereTo={};
 const serverUrl = "http://localhost:3001/api/";
 class App extends Component {
   constructor(props) {
