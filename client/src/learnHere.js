@@ -13,42 +13,37 @@ export const Learnhere=(props)=>{
     
   else{
 
-    var headers=[];
-    var data = [];
+    var allList = [];
+    // const headerVal;
+    console.log(props.location)
+    var headerVal=props.location.state.toUpperCase();
     const display=props.location.data.message[0];
     console.log(display)
     if(display){
-        for (let [key, value] of Object.entries(display)) {
-            
-            headers.push(key)
-            data.push(value)
-          }
-        //   for(let i=0;i<data.length;i++){
-              
-        //   }
-          console.log(headers,data)
           console.timeEnd()
+          for(let key in display){
+            allList.push(<List place={key} list={display[key]}></List>)
+          }
+            console.log(allList)
+          
         return(
-            <table>
-                <thead>
-                    <tr>
-                {(headers).map((k)=>
-                <th key={k} className="lh-header">{k}</th>
-                )}
-                </tr>
-                </thead>
-                <tbody>
-                    {data.map(k=>
-                        {k.map(val=> <tr><td>{val}</td></tr>)}
-                        )}
-                 
-                </tbody>
-            </table>
+            <div>
+                <h2 className="lh-header">{headerVal}</h2>
+                <span className="lh-card-layout"> {allList} </span>
+           </div>
         )
     }
     else
             return(<div>Details will be added soon</div>)
         }
 }
+
+const List =({place,list})=>
+<div className="lh-container">
+    <div className="lh-cat-header">{place}</div>
+    {list.map((val,i)=>
+        <div className="lh-val" key={i} >{val}</div>
+        )}
+</div>
 
 export default Learnhere;

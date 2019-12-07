@@ -50,14 +50,16 @@ class App extends Component {
       );
   }
 
-  fetchSubCategory(e){
-    console.log("fetchSubCategory",e);
-    let url=serverUrl+"subcat?sc="+e;
+  
+  fetchSubCategory(sc_code,sc_val){
+    console.log("fetchSubCategory",sc_code,sc_val);
+    let url=serverUrl+"subcat?sc="+sc_code;
     fetch(decodeURI(url)).then(res=>res.json()).then(result=>{
       console.log(result);
       this.props.history.push({
         pathname:'/learn',
-        data:result}
+        data:result,
+        state:sc_val}
         )
     })
   }
@@ -90,7 +92,7 @@ class App extends Component {
         <h2>{helloWorld}</h2>
         <h4>Please select a topic</h4>
         <ul className="App-navmain">
-          {this.state.subjects.map(el=> <li key={el.topic_code} onClick={this.fetchSubCategory.bind(this,el.topic_code)} className="App-navlist" value={el.topic_code}>
+          {this.state.subjects.map(el=> <li key={el.topic_code} onClick={this.fetchSubCategory.bind(this,el.topic_code,el.display_val)} className="App-navlist" value={el.topic_code}>
             {el.display_val}
           </li>)}
         </ul>
